@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+sqlalchemy
+passlib
+bcrypt
+chromadb
+sentence-transformers
+anthropic
+python-multipart
+python-dotenv

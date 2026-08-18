@@ -2,7 +2,7 @@
 
 > **Nguồn:** nội dung lab do ban tổ chức cung cấp trên nền tảng VLearn Codelabs.
 > **Mục đích của file này:** giữ nguyên yêu cầu/rubric gốc của ban tổ chức ở một nơi riêng, tách khỏi các file bài làm của nhóm (`README.md`, `three-option-design-sheet.md`, `prototype-link.md`, `prototype-feedback-note.md`, `group-feedback-synthesis.md`, `ai-support-log.md`). Không chỉnh sửa nội dung yêu cầu trong file này — mọi bài làm, diễn giải, quyết định của nhóm nằm ở các file khác.
-> **Tài liệu gốc kèm theo (giữ nguyên, không chỉnh sửa):** `Day18.pdf`, `Day18-Design.pdf`, `Day18-Prototype.pdf`, `Day17-The Mom Test.pdf`, `Day 17.pdf`.
+> **Tài liệu gốc kèm theo (giữ nguyên, không chỉnh sửa):** [references/Day18.pdf](references/Day18.pdf), [references/Day18-Design.pdf](references/Day18-Design.pdf), [references/Day18-Prototype.pdf](references/Day18-Prototype.pdf), [references/Day17-The Mom Test.pdf](references/Day17-The%20Mom%20Test.pdf), [references/Day 17.pdf](references/Day%2017.pdf).
 
 ---
 
