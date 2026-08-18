@@ -48,10 +48,10 @@ npm install
 ```powershell
 cd prototype\backend
 # Nhớ activate venv nếu có: .\venv\Scripts\activate
-python -m uvicorn app.main:app --reload --port 8000
+python -m uvicorn app.main:app --reload --port 8001
 ```
 
-👉 *Backend API sẽ lắng nghe tại: `http://localhost:8000`*
+👉 *Backend API sẽ lắng nghe tại: `http://localhost:8001`*
 
 **Terminal 2 (Chạy Frontend):**
 

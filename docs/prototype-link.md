@@ -10,13 +10,13 @@
 
 Chi tiết vui lòng xem tại `SETUP_GUIDE.md` ở thư mục gốc. Dưới đây là tóm tắt nhanh:
 
-**1. Khởi động Backend (Port 8000):**
+**1. Khởi động Backend (Port 8001):**
 ```powershell
 cd prototype\backend
 python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
-python -m uvicorn app.main:app --reload --port 8000
+python -m uvicorn app.main:app --reload --port 8001
 ```
 
 **2. Khởi động Frontend (Port 3000):**
@@ -30,3 +30,4 @@ npm run dev
 **3. Link truy cập:**
 Mở trình duyệt: `http://localhost:3000`
 (Port frontend đã được đổi thành 3000 để tránh xung đột với các tiến trình chạy port 5173 hiện tại).
+
