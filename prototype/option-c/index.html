@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Option C — Đã được duyệt trước</title>
+<link rel="stylesheet" href="../shared/styles.css">
+</head>
+<body>
+<!--
+OPTION C — Đã được người thật duyệt
+We expect the tester to: chờ hệ thống tự phát hiện điểm dừng lâu rồi đưa ra câu trả lời đã được coach xác nhận, sau đó cho phản hồi có giải quyết được vấn đề hay không.
+Watch for: tester có nhận ra hệ thống chủ động đưa câu trả lời lên (không phải họ tự bấm) hay không; phản ứng khi chọn 👎 và thấy câu hỏi được chuyển cho coach.
+Do not explain: đừng nói trước là câu trả lời đã được duyệt sẵn — để tester tự đọc nhãn "Đã được coach xác nhận".
+-->
+<div class="wrap">
+  <div class="nav-row">
+    <a href="../index.html">← Danh sách option</a>
+    <span>Option C · Đã được duyệt trước</span>
+  </div>
+
+  <header class="context-card">
+    <div class="context-meta">VLearn · Lab 3 — Kết nối API key cho model · Bước 3/6</div>
+    <pre class="terminal">$ python app.py
+Traceback (most recent call last):
+  File "app.py", line 12, in &lt;module&gt;
+    response = client.chat.completions.create(...)
+openai.AuthenticationError: Error code: 401 - Incorrect API key provided: sk-***abcd.
+You can find your API key at https://platform.openai.com/account/api-keys.</pre>
+    <p class="task-line"><strong>Task:</strong> Có được một câu trả lời đủ tin cậy để đi tiếp bước đang làm dở. Coach đang bận hỗ trợ nhóm khác.</p>
+  </header>
+
+  <div class="panel" id="waiting-panel">
+    <p style="color:var(--muted);font-size:14px">⏳ Đang xác định bạn có đang kẹt không...</p>
+  </div>
+
+  <div class="panel hidden" id="answer-panel">
+    <span class="badge badge-verified">✅ Đã được coach xác nhận</span>
+    <div class="answer-text">
+      <p>Kiểm tra file <code>.env</code> và biến <code>OPENAI_API_KEY</code> đã được nạp đúng chưa. Đảm bảo không có khoảng trắng hoặc dấu ngoặc kép quanh dấu <code>=</code>, sau đó chạy lại <code>source .env</code> hoặc khởi động lại terminal trước khi chạy <code>app.py</code> lần nữa.</p>
+    </div>
+    <p style="font-size:12px;color:var(--muted)">Được 12 learner khác dùng lại · xác nhận lần gần nhất bởi coach Nguyễn Hoàng Minh</p>
+    <div style="margin-top:14px">
+      <p style="margin:0 0 6px;font-size:14px"><strong>Câu này có giải quyết được vấn đề của bạn không?</strong></p>
+      <button class="btn btn-primary" onclick="giveFeedback('yes')">👍 Có</button>
+      <button class="btn" onclick="giveFeedback('no')">👎 Không</button>
+    </div>
+  </div>
+
+  <div class="panel hidden" id="result-yes">
+    <div class="result-box result-ok">Cảm ơn, câu trả lời tiếp tục được giữ trong thư viện.</div>
+  </div>
+  <div class="panel hidden" id="result-no">
+    <div class="result-box result-warn">Câu hỏi của bạn được gửi cho coach vì câu có sẵn chưa đúng với trường hợp của bạn.</div>
+  </div>
+</div>
+
+<script>
+setTimeout(function() {
+  document.getElementById('waiting-panel').classList.add('hidden');
+  document.getElementById('answer-panel').classList.remove('hidden');
+}, 1400);
+
+function giveFeedback(kind) {
+  document.getElementById('result-yes').classList.add('hidden');
+  document.getElementById('result-no').classList.add('hidden');
+  document.getElementById(kind === 'yes' ? 'result-yes' : 'result-no').classList.remove('hidden');
+}
+</script>
+</body>
+</html>

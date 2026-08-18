@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Option B — Tự khai mức chắc</title>
+<link rel="stylesheet" href="../shared/styles.css">
+</head>
+<body>
+<!--
+OPTION B — Tự khai mức chắc và chuyển tiếp
+We expect the tester to: thấy câu trả lời AI xuất hiện ngay kèm nhãn "Độ tin cậy: Thấp", rồi tự quyết định có gửi câu hỏi cho coach hay không.
+Watch for: tester có đọc lý do đưa ra mức độ tin cậy thấp hay chỉ nhìn nhãn màu; tester chọn "gửi cho coach" hay "bỏ qua tự thử".
+Do not explain: đừng giải thích AI tính độ tin cậy như thế nào — để tester tự diễn giải nhãn "Thấp".
+-->
+<div class="wrap">
+  <div class="nav-row">
+    <a href="../index.html">← Danh sách option</a>
+    <span>Option B · Tự khai mức chắc</span>
+  </div>
+
+  <header class="context-card">
+    <div class="context-meta">VLearn · Lab 3 — Kết nối API key cho model · Bước 3/6</div>
+    <pre class="terminal">$ python app.py
+Traceback (most recent call last):
+  File "app.py", line 12, in &lt;module&gt;
+    response = client.chat.completions.create(...)
+openai.AuthenticationError: Error code: 401 - Incorrect API key provided: sk-***abcd.
+You can find your API key at https://platform.openai.com/account/api-keys.</pre>
+    <p class="task-line"><strong>Task:</strong> Có được một câu trả lời đủ tin cậy để đi tiếp bước đang làm dở. Coach đang bận hỗ trợ nhóm khác.</p>
+  </header>
+
+  <div class="panel">
+    <span class="badge badge-low">Độ tin cậy: Thấp</span>
+    <p style="font-size:13px;color:var(--muted);margin-top:-4px">AI tự đánh giá: đây là lỗi xác thực tài khoản, nằm ngoài phạm vi mô tả trong tài liệu khóa học nên độ chắc chắn thấp.</p>
+    <div class="answer-text">
+      <p>Kiểm tra file <code>.env</code> và biến <code>OPENAI_API_KEY</code> đã được nạp đúng chưa. Đảm bảo không có khoảng trắng hoặc dấu ngoặc kép quanh dấu <code>=</code>, sau đó chạy lại <code>source .env</code> hoặc khởi động lại terminal trước khi chạy <code>app.py</code> lần nữa.</p>
+    </div>
+  </div>
+
+  <div class="panel" id="escalate-panel">
+    <h2>Độ tin cậy thấp — Bạn có muốn chuyển câu hỏi này cho coach không?</h2>
+    <button class="btn btn-primary" onclick="sendToCoach()">📨 Gửi cho coach (ẩn danh)</button>
+    <button class="btn" onclick="skipCoach()">Bỏ qua, tự thử trước</button>
+  </div>
+
+  <div class="panel hidden" id="result-sent">
+    <div class="result-box result-ok">Đã gửi ẩn danh tới coach. Bạn có thể tiếp tục làm việc khác trong lúc chờ.</div>
+    <button class="btn" style="margin-top:10px" onclick="showCoachReply()">🔔 (Demo) Coach vừa trả lời</button>
+    <div class="answer-text hidden" id="coach-reply" style="margin-top:10px">
+      <p><strong>Coach:</strong> Bạn thử in thêm <code>len(os.environ.get("OPENAI_API_KEY") or "")</code> để chắc là key được nạp đủ ký tự chưa nhé, nhiều bạn bị thiếu ký tự cuối do copy paste.</p>
+    </div>
+  </div>
+
+  <div class="panel hidden" id="result-skip">
+    <div class="result-box result-warn">Bạn tiếp tục với câu trả lời AI ban đầu, chưa gửi cho coach.</div>
+  </div>
+</div>
+
+<script>
+function sendToCoach() {
+  document.getElementById('escalate-panel').classList.add('hidden');
+  document.getElementById('result-sent').classList.remove('hidden');
+}
+function skipCoach() {
+  document.getElementById('escalate-panel').classList.add('hidden');
+  document.getElementById('result-skip').classList.remove('hidden');
+}
+function showCoachReply() {
+  document.getElementById('coach-reply').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
