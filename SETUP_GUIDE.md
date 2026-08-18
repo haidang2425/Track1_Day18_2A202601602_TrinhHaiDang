@@ -3,6 +3,7 @@
 Tài liệu này hướng dẫn cách setup toàn bộ hệ thống (Frontend React + Backend FastAPI) và khởi chạy thông qua Terminal / PowerShell.
 
 ## 1. Yêu cầu hệ thống (Prerequisites)
+
 - **Node.js** (Phiên bản v18 trở lên) - Dùng để chạy Frontend.
 - **Python** (Phiên bản 3.9 trở lên) - Dùng để chạy Backend FastAPI.
 
@@ -13,6 +14,7 @@ Tài liệu này hướng dẫn cách setup toàn bộ hệ thống (Frontend Re
 Bạn cần mở Terminal (hoặc PowerShell) tại thư mục gốc của dự án và chạy các lệnh sau:
 
 ### Bước 2.1: Cài đặt Backend
+
 ```powershell
 cd prototype\backend
 
@@ -27,7 +29,9 @@ pip install -r requirements.txt
 ```
 
 ### Bước 2.2: Cài đặt Frontend
+
 Mở một cửa sổ PowerShell khác (hoặc tab mới):
+
 ```powershell
 cd prototype\frontend
 npm install
@@ -40,18 +44,22 @@ npm install
 Để chạy hệ thống, bạn cần bật 2 Terminal / PowerShell chạy song song:
 
 **Terminal 1 (Chạy Backend):**
+
 ```powershell
 cd prototype\backend
 # Nhớ activate venv nếu có: .\venv\Scripts\activate
 python -m uvicorn app.main:app --reload --port 8000
 ```
+
 👉 *Backend API sẽ lắng nghe tại: `http://localhost:8000`*
 
 **Terminal 2 (Chạy Frontend):**
+
 ```powershell
 cd prototype\frontend
 npm run dev
 ```
+
 👉 *Frontend sẽ lắng nghe tại: `http://localhost:3000`*
 
 Sau khi cả 2 server đều báo chạy thành công, hãy mở trình duyệt và truy cập `http://localhost:3000` để trải nghiệm sản phẩm.
@@ -59,6 +67,7 @@ Sau khi cả 2 server đều báo chạy thành công, hãy mở trình duyệt 
 ---
 
 ## Cấu trúc thư mục chuẩn Production
+
 ```
 .
 ├── assets/
