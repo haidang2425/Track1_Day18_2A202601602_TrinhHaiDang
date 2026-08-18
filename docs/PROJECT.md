@@ -1,6 +1,6 @@
-# VLearn AI Tutor — Master Project Specification (v3.0 · Final)
+# VLearn AI Tutor — Master Project Specification (v4.0 · Production-Deployed)
 
-> **Dành cho AI Agent:** Đây là tài liệu spec kỹ thuật DUY NHẤT và CUỐI CÙNG (v3.0 — đã tích hợp mọi patch trước đó). Đọc từ đầu đến cuối trước khi viết bất kỳ dòng code nào. Không được tự ý thêm/bỏ/thay đổi kiến trúc. Thực thi đúng thứ tự: DB → Auth → Seed → Services → Routers → Frontend.
+> **Dành cho AI Agent:** Đây là tài liệu spec kỹ thuật DUY NHẤT và CUỐI CÙNG (v4.0 — tích hợp mọi patch + deployment + multi-provider + guardrails). Đọc từ đầu đến cuối trước khi viết bất kỳ dòng code nào. Thực thi đúng thứ tự: DB → Auth → Seed → Services → Routers → Frontend → Deploy.
 
 ---
 
@@ -26,17 +26,20 @@
 | Frontend | React 18 + Vite | CSS Modules, không Tailwind |
 | Styling | Vanilla CSS + CSS Modules | Google Fonts: Inter + Outfit |
 | Backend | Python FastAPI + SQLite | SQLAlchemy ORM |
-| Server | Uvicorn | `--port 8001 --reload`, chạy từ thư mục `backend/` |
-| AI LLM | **OpenRouter** (via OpenAI SDK) | Free model chain, fallback mock nếu no key |
+| Server | Uvicorn | local: `--port 8001`, production: Railway/Render |
+| **AI LLM** | **Multi-provider Rotation** | Groq → OpenRouter → Gemini → Mock (xem Mục 7A) |
+| **Guardrails** | Custom middleware | Input sanitize, output filter, per-user rate limit |
 | Embeddings | `intfloat/multilingual-e5-small` | Singleton, load 1 lần khi start |
-| Vector Search | **NumPy + SQLite** | Embedding lưu trong cột `CourseChunk.embedding_json` |
+| Vector Search | NumPy + SQLite | Embedding trong `CourseChunk.embedding_json` |
 | PDF Ingest | `pymupdf` (fitz) | Render slides thật, extract text theo trang |
 | Auth | JWT (python-jose, HS256) | Header `Authorization: Bearer <token>` |
 | Charts | recharts | Chỉ dùng ở `/compare` |
-| Port Frontend | **3001** | Proxy Vite → `8001` |
-| Port Backend | **8001** | |
+| **Deploy Frontend** | **Vercel** | Zero-config Vite, free tier, CDN global |
+| **Deploy Backend** | **Railway** | Free $5/tháng credit, auto-deploy từ GitHub |
+| Port Local Frontend | 3001 | Proxy Vite → `8001` |
+| Port Local Backend | 8001 | |
 
-> **KHÔNG có ChromaDB.** KHÔNG có Anthropic. KHÔNG có Docker/deploy config.
+> **KHÔNG có ChromaDB.** KHÔNG có Anthropic SDK trực tiếp. Mọi LLM đều qua provider rotation.
 
 ---
 
@@ -291,6 +294,253 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 480  # 8 giờ
 |---|---|---|---|
 | learner | `26ai.minhnh@vinuni.edu.vn` | `demo1234` | Nguyễn Hoàng Minh |
 | coach | `coach.dangth@vinuni.edu.vn` | `coach1234` | Trịnh Hải Đăng |
+
+---
+
+## 7A. MULTI-PROVIDER LLM — ROTATION & FALLBACK CHAIN
+
+### Kiến trúc tổng quan
+
+Hệ thống xoay vòng qua **3 provider** độc lập theo thứ tự ưu tiên. Mỗi provider có rate limit riêng — xoay vòng giữa các provider (không phải nhiều key cùng provider) mới thực sự hiệu quả:
+
+```
+Request → [Groq: llama-3.3-70b] → 429/fail → [OpenRouter: gemini-2.0-flash-exp:free] → 429/fail → [Google Gemini: gemini-1.5-flash-8b] → fail → _mock_generate()
+```
+
+**Lý do chọn từng provider:**
+- **Groq:** Latency cực thấp (<1s), free 14,400 RPD (requests/day), model llama-3.3-70b chất lượng tốt
+- **OpenRouter:** Access nhiều model free, dùng Gemini-flash-exp miễn phí, rate limit khác Groq
+- **Google Gemini API:** Free 15 RPM, 1 triệu token/ngày với gemini-1.5-flash-8b
+
+### Cài đặt requirements.txt thêm:
+```
+openai>=1.50.0          # dùng cho Groq + OpenRouter (đều tương thích OpenAI format)
+google-generativeai>=0.8.0  # Gemini SDK
+```
+
+### services/generation.py — Triển khai đầy đủ
+
+```python
+import openai, os, json, time, re
+import google.generativeai as genai
+
+# ─── PROVIDER CONFIGS ──────────────────────────────────────────────────────
+GROQ_CLIENT = openai.OpenAI(
+    base_url="https://api.groq.com/openai/v1",
+    api_key=os.getenv("GROQ_API_KEY", "")
+) if os.getenv("GROQ_API_KEY") else None
+
+OPENROUTER_CLIENT = openai.OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.getenv("OPENROUTER_API_KEY", "")
+) if os.getenv("OPENROUTER_API_KEY") else None
+
+GEMINI_CONFIGURED = False
+if os.getenv("GEMINI_API_KEY"):
+    genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+    GEMINI_CONFIGURED = True
+
+# Thứ tự ưu tiên: nhanh nhất trước
+PROVIDER_CHAIN = [
+    {"name": "groq",       "client": GROQ_CLIENT,       "model": "llama-3.3-70b-versatile"},
+    {"name": "openrouter", "client": OPENROUTER_CLIENT,  "model": "google/gemini-2.0-flash-exp:free"},
+    {"name": "gemini",     "client": None,               "model": "gemini-1.5-flash-8b"},
+]
+
+# ─── GUARDRAILS — áp trước khi gửi tới bất kỳ provider nào ─────────────────
+BLOCKED_PATTERNS = [
+    r"ignore (previous|above|prior|all) instructions",
+    r"jailbreak|DAN|pretend you are|act as",
+    r"system prompt|forget your",
+]
+MAX_QUESTION_LEN = 1000  # ký tự
+
+def apply_input_guardrail(text: str) -> tuple[bool, str]:
+    """
+    Trả về (is_safe: bool, reason: str).
+    Gọi trước khi gửi tới LLM.
+    """
+    if len(text) > MAX_QUESTION_LEN:
+        return False, f"Câu hỏi quá dài (tối đa {MAX_QUESTION_LEN} ký tự)."
+    for pat in BLOCKED_PATTERNS:
+        if re.search(pat, text, re.IGNORECASE):
+            return False, "Câu hỏi chứa nội dung không được phép."
+    return True, ""
+
+def apply_output_guardrail(answer: str) -> str:
+    """
+    Lọc output: strip PII placeholder, cảnh báo nếu answer chứa code đáng ngờ.
+    """
+    # Xóa bất kỳ chuỗi trông như API key trong output
+    answer = re.sub(r'sk-[a-zA-Z0-9\-_]{20,}', '[API_KEY_REDACTED]', answer)
+    answer = re.sub(r'AIza[a-zA-Z0-9\-_]{30,}', '[API_KEY_REDACTED]', answer)
+    return answer.strip()
+
+
+# ─── CALL LLM (OpenAI-compatible: Groq + OpenRouter) ───────────────────────
+def _call_openai_compat(client: openai.OpenAI, model: str, prompt: str) -> str:
+    resp = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1024,
+        temperature=0.3
+    )
+    return resp.choices[0].message.content.strip()
+
+def _call_gemini(model_name: str, prompt: str) -> str:
+    model = genai.GenerativeModel(model_name)
+    resp = model.generate_content(prompt)
+    return resp.text.strip()
+
+
+# ─── MAIN FUNCTION ──────────────────────────────────────────────────────────
+def generate_with_citations(question: str, chunks: list[dict], task_context: str = "") -> dict:
+    start = time.time()
+
+    # 1. Input guardrail
+    is_safe, reason = apply_input_guardrail(question)
+    if not is_safe:
+        return {
+            "answer_text": f"⚠️ {reason} Vui lòng đặt câu hỏi liên quan đến nội dung bài học.",
+            "claims": [], "retrieval_score": 0.0, "grounded_ratio": 0.0,
+            "latency_ms": int((time.time() - start) * 1000),
+            "provider": "guardrail_blocked"
+        }
+
+    # 2. Build prompt (đánh số [1][2][3])
+    numbered = [f"[{i+1}] {c['source_label']} — {c['content']}" for i, c in enumerate(chunks)]
+    prompt = f"""Bạn là AI Tutor hỗ trợ học viên VinUniversity. CHỈ dựa vào tài liệu bên dưới.
+
+TÌNH HUỐNG: {task_context or "Đang làm lab AI."}
+CÂU HỎI / LỖI: {question}
+
+TÀI LIỆU:
+{chr(10).join(numbered)}
+
+Trả về JSON (không text ngoài JSON):
+{{
+  "answer": "câu trả lời tiếng Việt, rõ ràng, dưới 200 từ",
+  "claims": [
+    {{"claim": "mệnh đề cụ thể", "source_chunk_index": 1}},
+    {{"claim": "không có trong tài liệu", "source_chunk_index": null}}
+  ]
+}}"""
+
+    # 3. Provider rotation
+    raw_response, used_provider = None, "mock"
+    for p in PROVIDER_CHAIN:
+        try:
+            if p["name"] == "gemini":
+                if not GEMINI_CONFIGURED: continue
+                raw_response = _call_gemini(p["model"], prompt)
+            else:
+                if not p["client"]: continue
+                raw_response = _call_openai_compat(p["client"], p["model"], prompt)
+            used_provider = p["name"]
+            break
+        except openai.RateLimitError:
+            continue  # 429 → thử provider kế tiếp
+        except Exception:
+            continue  # lỗi khác cũng thử provider kế (network, timeout)
+
+    if raw_response is None:
+        return _mock_generate(question, chunks, start)
+
+    # 4. Parse JSON
+    try:
+        parsed = json.loads(raw_response)
+    except json.JSONDecodeError:
+        match = re.search(r'\{.*\}', raw_response, re.DOTALL)
+        parsed = json.loads(match.group()) if match else {"answer": raw_response, "claims": []}
+
+    # 5. Output guardrail
+    answer_text = apply_output_guardrail(parsed.get("answer", ""))
+
+    # 6. Map index → source_label
+    claims = []
+    for c in parsed.get("claims", []):
+        idx = c.get("source_chunk_index")
+        if idx and 1 <= idx <= len(chunks):
+            claims.append({"claim": c["claim"], "source_label": chunks[idx-1]["source_label"], "chunk_id": chunks[idx-1]["db_chunk_id"]})
+        else:
+            claims.append({"claim": c["claim"], "source_label": None, "chunk_id": None})
+
+    grounded = sum(1 for c in claims if c["source_label"])
+    grounded_ratio = grounded / len(claims) if claims else 0.0
+
+    return {
+        "answer_text": answer_text,
+        "claims": claims,
+        "retrieval_score": chunks[0]["score"] if chunks else 0.0,
+        "grounded_ratio": grounded_ratio,
+        "latency_ms": int((time.time() - start) * 1000),
+        "provider": used_provider  # Log provider đã dùng để debug
+    }
+
+
+def _mock_generate(question: str, chunks: list[dict], start: float) -> dict:
+    latency_ms = int((time.time() - start) * 1000) + 300
+    if chunks:
+        return {
+            "answer_text": f"[DEMO] Dựa vào tài liệu ({chunks[0]['source_label']}): Lỗi liên quan đến '{question[:40]}...' có thể tìm thấy tại {chunks[0]['source_label']}. Kiểm tra lại file `.env` và biến API key.",
+            "claims": [
+                {"claim": f"Tham khảo {chunks[0]['source_label']}", "source_label": chunks[0]["source_label"], "chunk_id": chunks[0]["db_chunk_id"]},
+                {"claim": "Thông tin bổ sung chưa có trong tài liệu", "source_label": None, "chunk_id": None}
+            ],
+            "retrieval_score": chunks[0]["score"],
+            "grounded_ratio": 0.5,
+            "latency_ms": latency_ms,
+            "provider": "mock"
+        }
+    return {"answer_text": "[DEMO] Không tìm thấy tài liệu liên quan. Đề nghị hỏi Coach.", "claims": [], "retrieval_score": 0.0, "grounded_ratio": 0.0, "latency_ms": latency_ms, "provider": "mock"}
+```
+
+---
+
+## 7B. GUARDRAILS — Middleware & Per-User Rate Limit
+
+```python
+# backend/app/services/guardrails.py
+
+from collections import defaultdict
+from datetime import datetime, timedelta
+
+# Per-user rate limit: tối đa 20 requests / 10 phút
+_user_requests: dict[int, list[datetime]] = defaultdict(list)
+USER_RATE_LIMIT = 20
+RATE_WINDOW_SECONDS = 600
+
+def check_rate_limit(user_id: int) -> tuple[bool, str]:
+    now = datetime.utcnow()
+    window_start = now - timedelta(seconds=RATE_WINDOW_SECONDS)
+    # Xóa request cũ ngoài window
+    _user_requests[user_id] = [t for t in _user_requests[user_id] if t > window_start]
+    if len(_user_requests[user_id]) >= USER_RATE_LIMIT:
+        return False, f"Bạn đã gửi quá {USER_RATE_LIMIT} câu hỏi trong 10 phút. Vui lòng thử lại sau."
+    _user_requests[user_id].append(now)
+    return True, ""
+```
+
+**Tích hợp vào mỗi router `/answer`:**
+```python
+# Ở đầu mỗi handler mode_a, mode_b, mode_c
+from app.services.guardrails import check_rate_limit
+from app.services.generation import apply_input_guardrail
+
+ok, msg = check_rate_limit(current_user.id)
+if not ok:
+    raise HTTPException(status_code=429, detail=msg)
+# Input guardrail đã được tích hợp bên trong generate_with_citations()
+```
+
+**FastAPI global exception handler:**
+```python
+# trong main.py
+@app.exception_handler(Exception)
+async def generic_handler(request, exc):
+    # Log lỗi, không expose stack trace ra client
+    return JSONResponse(status_code=500, content={"detail": "Lỗi server, vui lòng thử lại."})
+```
 
 ---
 
@@ -970,10 +1220,150 @@ Mở `/compare` → chỉ vào bảng "4 Quyết Định × 3 Option": *"3 optio
 
 ---
 
-## 16. GHI CHÚ CUỐI
+## 16. DEPLOYMENT (Bắt buộc)
 
-1. **Không cloud deploy.** Chỉ chạy local: `uvicorn app.main:app --port 8001 --reload` + `npm run dev` (port 3001). Nếu cần link public khi demo: `ngrok http 3001` — không cần code gì thêm.
-2. **slide-placeholder.png:** Tạo 1 ảnh tĩnh đơn giản màu xám nhạt với text "Slide đang tải..." dùng canvas API hoặc tạo thủ công. KHÔNG hotlink domain ngoài — tránh phụ thuộc mạng lúc demo.
-3. **OpenRouter free models:** Rate limit thấp nhưng đủ cho demo. Nếu cả 3 model trong chain đều 429 (hiếm xảy ra) → fallback mock. Không build key rotation — vô nghĩa vì limit theo project.
-4. **Routers phải trong app/routers/:** Import `from app.routers import mode_a`, chạy từ `backend/` — không phải từ `backend/app/`.
-5. **InteractionLog.id là thứ tự tăng dần tự nhiên** — dùng trực tiếp làm `interaction_seq` cho charts, không cần field riêng.
+### 16.1. Backend → Railway
+
+1. Đăng ký tài khoản tại https://railway.app, connect GitHub repo
+2. Tạo project mới → chọn repo → Railway tự detect Python
+3. Thêm file `backend/Procfile`:
+   ```
+   web: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+   ```
+4. Thêm file `backend/runtime.txt`:
+   ```
+   python-3.11
+   ```
+5. Trong Railway Dashboard → Variables, thêm tất cả env vars:
+   ```
+   GROQ_API_KEY=gsk_...
+   OPENROUTER_API_KEY=sk-or-...
+   GEMINI_API_KEY=AIza...
+   JWT_SECRET_KEY=random-long-string-production
+   ```
+6. Set **Root Directory** = `prototype/backend` trong Railway settings
+7. Railway tự deploy → lấy URL dạng `https://vlearn-backend-xxx.railway.app`
+
+### 16.2. Frontend → Vercel
+
+1. Đăng ký tại https://vercel.com, import GitHub repo
+2. Trong Vercel project settings:
+   - **Root Directory:** `prototype/frontend`
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+3. Thêm Environment Variables:
+   ```
+   VITE_API_BASE_URL=https://vlearn-backend-xxx.railway.app
+   ```
+4. Cập nhật `frontend/src/api/client.js`:
+   ```javascript
+   const BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
+   // Khi local: Vite proxy xử lý (BASE_URL = '')
+   // Khi production: dùng Railway URL trực tiếp
+   ```
+5. **Cập nhật `vite.config.js` để production build không có proxy config ảnh hưởng:**
+   ```javascript
+   export default defineConfig({
+     plugins: [react()],
+     server: { // Chỉ có tác dụng khi dev local
+       port: 3001,
+       proxy: {
+         '/api': 'http://localhost:8001',
+         '/auth': 'http://localhost:8001',
+         '/coach': 'http://localhost:8001',
+       }
+     }
+   })
+   ```
+6. **CORS backend (main.py) phải allow Vercel domain:**
+   ```python
+   app.add_middleware(
+       CORSMiddleware,
+       allow_origins=[
+           "http://localhost:3001",
+           "https://*.vercel.app",  # Vercel preview URLs
+           os.getenv("FRONTEND_URL", ""),  # Vercel production URL
+       ],
+       allow_credentials=True,
+       allow_methods=["*"],
+       allow_headers=["*"],
+   )
+   ```
+7. Vercel tự deploy → lấy URL dạng `https://vlearn-ui.vercel.app`
+
+### 16.3. Seed database trên Railway
+
+Sau khi backend deploy xong, chạy seed qua Railway CLI:
+```bash
+# Cài Railway CLI
+npm install -g @railway/cli
+railway login
+
+# Chạy seed (từ thư mục gốc project)
+railway run --service vlearn-backend python seed/seed_users.py
+railway run --service vlearn-backend python seed/seed_course_docs.py
+railway run --service vlearn-backend python seed/seed_library.py
+```
+
+> **Lưu ý:** SQLite trên Railway bị reset mỗi khi redeploy (ephemeral storage). Để persist, dùng Railway Volume hoặc đổi sang PostgreSQL nếu cần. Với scope demo ngắn hạn, SQLite là đủ — seed lại sau mỗi deploy.
+
+### 16.4. Demo URL chuẩn production
+
+Sau khi deploy thành công:
+- **Link trải nghiệm:** `https://vlearn-ui.vercel.app`
+- **API docs:** `https://vlearn-backend-xxx.railway.app/docs` (FastAPI Swagger UI)
+- **Health check:** `https://vlearn-backend-xxx.railway.app/health`
+
+Ghi link này vào `docs/prototype-link.md` để BGK bấm trực tiếp.
+
+---
+
+## 17. REQUIREMENTS.TXT (hoàn chỉnh v4.0)
+
+```
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+sqlalchemy==2.0.35
+pydantic==2.9.2
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+python-dotenv==1.0.1
+openai>=1.50.0
+google-generativeai>=0.8.0
+sentence-transformers==3.2.1
+numpy>=1.24.0
+python-multipart==0.0.12
+pymupdf==1.24.11
+```
+
+> Không có `anthropic`, không có `chromadb`.
+
+---
+
+## 18. .ENV.EXAMPLE (hoàn chỉnh v4.0)
+
+```
+# ── LLM Providers (thêm càng nhiều càng tốt, thiếu provider nào thì skip) ──
+GROQ_API_KEY=gsk_...                  # https://console.groq.com (free, nhanh nhất)
+OPENROUTER_API_KEY=sk-or-...          # https://openrouter.ai (nhiều model free)
+GEMINI_API_KEY=AIza...                # https://aistudio.google.com (free 15 RPM)
+
+# ── Auth ──
+JWT_SECRET_KEY=change-this-to-random-long-string-in-production
+
+# ── Deployment ──
+FRONTEND_URL=https://vlearn-ui.vercel.app   # Điền sau khi deploy Vercel
+```
+
+---
+
+## 19. GHI CHÚ CUỐI (v4.0)
+
+1. **Multi-provider rotation:** Ưu tiên Groq (nhanh nhất) → OpenRouter → Gemini → Mock. Chỉ cần có ít nhất 1 key là hệ thống hoạt động.
+2. **Railway SQLite:** Bị reset khi redeploy. Nếu demo kéo dài nhiều ngày, thêm `railway volume` để persist `vlearn.db`.
+3. **slide-placeholder.png:** File local màu xám nhạt. KHÔNG hotlink domain ngoài — tránh phụ thuộc mạng lúc demo.
+4. **Routers trong `app/routers/`:** Import `from app.routers import mode_a`. Chạy `uvicorn` từ thư mục `backend/`.
+5. **InteractionLog.id = interaction_seq** tự nhiên tăng dần — dùng trực tiếp cho charts.
+6. **CORS production:** Nhớ set `FRONTEND_URL` env var trên Railway, và add Vercel URL vào `allow_origins`.
+7. **Slide images:** `seed_course_docs.py` render PNG vào `frontend/public/slides/`. Sau deploy, Vercel phục vụ static files này trực tiếp — không cần endpoint riêng.
+8. **API docs public khi demo:** FastAPI `/docs` endpoint của Railway URL là Swagger UI đầy đủ — BGK kỹ thuật có thể test API trực tiếp từ đó.
