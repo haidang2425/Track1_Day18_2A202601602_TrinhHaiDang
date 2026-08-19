@@ -3,6 +3,7 @@ import os
 import json
 from pathlib import Path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.dirname(__file__))
 
 from app.db import SessionLocal, CourseChunk
 from app.services.pdf_ingest import ingest_pdf
