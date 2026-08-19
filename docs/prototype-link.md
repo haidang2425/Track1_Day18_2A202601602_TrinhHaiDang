@@ -7,7 +7,7 @@
 | Bản | Link | Ghi chú |
 |---|---|---|
 | Micro-prototype A/B/C (chung của nhóm 333) | [track1-day18-group333.vercel.app](https://track1-day18-group333.vercel.app/) | Bản deploy chung cả nhóm dùng để test A/B/C ở Chặng 5-6 |
-| MVP cá nhân (Trịnh Hải Đăng) | *(đang deploy — cập nhật link sau khi xong)* | Bản MVP riêng, tách biệt với bản chung của nhóm |
+| MVP cá nhân (Trịnh Hải Đăng) | [frontend-sable-eight-73.vercel.app](https://frontend-sable-eight-73.vercel.app) | Frontend (Vercel) + Backend FastAPI ([vlearn-backend-55ov.onrender.com](https://vlearn-backend-55ov.onrender.com), free tier — DB tự seed lại khi khởi động vì không có persistent disk, request đầu sau khi ngủ có thể chậm ~30-60s) |
 
 ## Trạng thái hiện tại
 
