@@ -6,13 +6,33 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from .db import engine, Base
+from .db import engine, Base, SessionLocal, User
 from .routers import auth_router, mode_a, mode_b, mode_c, coach, compare, history
 
 # Create tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="VLearn AI Tutor API")
+
+@app.on_event("startup")
+def auto_seed_if_empty():
+    """Free-tier hosting (Render/Railway) không có persistent disk — SQLite bị
+    reset mỗi khi container ngủ rồi khởi động lại. Tự seed lại nếu DB trống,
+    thay vì bắt cắm Shell (Shell không có ở free tier)."""
+    db = SessionLocal()
+    try:
+        if db.query(User).count() > 0:
+            return
+        from seed.seed_users import seed_users
+        from seed.seed_course_docs import seed_course_docs
+        from seed.seed_library import seed_library
+        seed_users()
+        seed_course_docs()
+        seed_library()
+    except Exception as exc:
+        print(f"Auto-seed skipped/failed: {exc}")
+    finally:
+        db.close()
 
 # CORS setup for local + production Vercel
 # Lưu ý: allow_origins so khớp CHÍNH XÁC chuỗi, không hỗ trợ wildcard "*.vercel.app"
