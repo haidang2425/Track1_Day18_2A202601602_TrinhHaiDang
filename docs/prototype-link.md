@@ -2,6 +2,13 @@
 
 > Kiến trúc, data model, API endpoints và build plan của MVP nằm ở `docs/PROJECT.md`. File này chỉ có **cách chạy prototype**.
 
+## Link truy cập
+
+| Bản | Link | Ghi chú |
+|---|---|---|
+| Micro-prototype A/B/C (chung của nhóm 333) | [track1-day18-group333.vercel.app](https://track1-day18-group333.vercel.app/) | Bản deploy chung cả nhóm dùng để test A/B/C ở Chặng 5-6 |
+| MVP cá nhân (Trịnh Hải Đăng) | *(đang deploy — cập nhật link sau khi xong)* | Bản MVP riêng, tách biệt với bản chung của nhóm |
+
 ## Trạng thái hiện tại
 
 ✅ Hệ thống đã được nâng cấp lên bản MVP hoàn chỉnh với **Frontend (React/Vite)** và **Backend (Python FastAPI)** thay vì bản demo HTML tĩnh ban đầu. 3 Option (A, B, C) đã được tích hợp trực tiếp vào trong UI của Dashboard để Ban Giám Khảo dễ dàng thay đổi qua Dropdown.

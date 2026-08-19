@@ -28,9 +28,11 @@
 
 ## Đóng góp của tôi trong nhóm (Trịnh Hải Đăng)
 
-> *(Để điền — ghi cụ thể phần bạn chịu trách nhiệm: option nào, shared context/content, Human–AI decisions, facilitation, observation hay tổng hợp feedback. Đây là phần phản ánh cá nhân, cần tự viết theo yêu cầu "Không được dùng AI để... viết thay phần đóng góp và reflection cá nhân".)*
+> *(Bản nháp dựa trên đúng những gì đã được ghi lại trong tài liệu của nhóm — bạn đọc lại, sửa và bổ sung phần bạn tự làm mà tài liệu chưa nhắc tới, ví dụ bạn build/chịu trách nhiệm chính option nào ở Chặng 4, vì phần đó chưa có ghi chú rõ trong README.)*
 
-...
+- **Chặng 1 — Evidence:** thực hiện Practice Note 3, phỏng vấn learner Đỗ Duy Đức — evidence này chỉ ra rào cản tâm lý khi ngại hỏi lab coach và hành vi chụp slide hỏi ChatGPT ngoài nền tảng, dẫn tới việc nhóm sửa lại giả thuyết ban đầu (learner không phải không biết mình hổng ở đâu, mà thiếu cơ chế kiểm chứng). Viết bản nháp đầu tiên của Hypothesis Problem, sau đó nhóm cùng chỉnh lại hai điểm (situation và job) dựa trên evidence trước khi chốt.
+- **Chặng 6 — Test và Feedback Note:** facilitate phiên usability test A/B/C với tester Nguyễn Đức Đạt; dẫn buổi qua từng Option, ghi nhận lựa chọn (Option A) và lý do, tổng hợp thành [prototype-feedback-note.md](docs/prototype-feedback-note.md).
+- *(Bổ sung nếu có: vai trò cụ thể ở Chặng 2-4 — ví dụ đóng góp ý tưởng cho Option nào, hoặc trực tiếp build phần nào của prototype/web app.)*
 
 ## Chặng 1: Evidence huddle và chốt Hypothesis Problem
 
