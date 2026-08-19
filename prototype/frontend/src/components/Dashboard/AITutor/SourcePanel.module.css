@@ -1,0 +1,53 @@
+.container {
+  margin-top: 12px;
+  background-color: var(--color-bg);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-size: 13px;
+}
+
+.title {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text-primary);
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item {
+  line-height: 1.4;
+}
+
+.claimText {
+  color: var(--color-text-secondary);
+}
+
+.sourceLabel {
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--color-primary);
+  font-weight: 500;
+  cursor: pointer;
+  background-color: var(--color-primary-light);
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
+.sourceLabel:hover {
+  text-decoration: underline;
+}
+
+.warningLabel {
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--color-warning);
+  font-weight: 500;
+  background-color: var(--color-warning-bg);
+  padding: 0 4px;
+  border-radius: 4px;
+}

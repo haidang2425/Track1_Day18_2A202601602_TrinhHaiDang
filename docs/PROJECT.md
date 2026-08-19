@@ -299,6 +299,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 480  # 8 giờ
 
 ## 7A. MULTI-PROVIDER LLM — ROTATION & FALLBACK CHAIN
 
+> Thay thế mục 7.3 (bản v3.0 cũ, chỉ dùng OpenRouter) đã gỡ ở trên — dùng mục này làm chuẩn duy nhất cho `services/generation.py`.
+
 ### Kiến trúc tổng quan
 
 Hệ thống xoay vòng qua **3 provider** độc lập theo thứ tự ưu tiên. Mỗi provider có rate limit riêng — xoay vòng giữa các provider (không phải nhiều key cùng provider) mới thực sự hiệu quả:
@@ -603,119 +605,10 @@ def get_relevant_chunks(question_text: str, day: int, db_session, n_results: int
     ]
 ```
 
-### 7.3. Generation (services/generation.py) — OpenRouter + Fallback Chain
-
-```python
-import openai, os, json, time, re
-
-client = openai.OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENROUTER_API_KEY", "")
-)
-
-FREE_MODELS_FALLBACK_CHAIN = [
-    "google/gemini-2.0-flash-exp:free",
-    "meta-llama/llama-3.3-70b-instruct:free",
-    "qwen/qwen-2.5-72b-instruct:free",
-]
-
-def generate_with_citations(question: str, chunks: list[dict], task_context: str = "") -> dict:
-    """
-    Trả về: {answer_text, claims, retrieval_score, grounded_ratio, latency_ms}
-    claims = [{claim, source_label, chunk_id}]
-    """
-    start = time.time()
-    if not os.getenv("OPENROUTER_API_KEY", ""):
-        return _mock_generate(question, chunks, start)
-
-    # Đánh số [1][2][3] — KHÔNG dùng raw DB id
-    numbered = [f"[{i+1}] {c['source_label']} — {c['content']}" for i, c in enumerate(chunks)]
-    prompt = f"""Bạn là AI Tutor hỗ trợ học viên VinUniversity. CHỈ dựa vào tài liệu bên dưới.
-
-TÌNH HUỐNG: {task_context or "Đang làm lab AI."}
-CÂU HỎI / LỖI: {question}
-
-TÀI LIỆU:
-{chr(10).join(numbered)}
-
-Trả về JSON (không text ngoài JSON):
-{{
-  "answer": "câu trả lời tiếng Việt, rõ ràng, dưới 200 từ",
-  "claims": [
-    {{"claim": "mệnh đề cụ thể", "source_chunk_index": 1}},
-    {{"claim": "không có trong tài liệu", "source_chunk_index": null}}
-  ]
-}}
-source_chunk_index là số 1/2/3 hoặc null."""
-
-    raw_response = None
-    for model in FREE_MODELS_FALLBACK_CHAIN:
-        try:
-            resp = client.chat.completions.create(
-                model=model,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=1024
-            )
-            raw_response = resp.choices[0].message.content.strip()
-            break  # Thành công → thoát vòng lặp
-        except openai.RateLimitError:
-            continue  # 429 → thử model tiếp theo
-        # Các exception khác (network, auth, v.v.) KHÔNG bắt — để raise lên cho FastAPI xử lý
-
-    if raw_response is None:
-        return _mock_generate(question, chunks, start)
-
-    # Parse JSON
-    try:
-        parsed = json.loads(raw_response)
-    except json.JSONDecodeError:
-        match = re.search(r'\{.*\}', raw_response, re.DOTALL)
-        parsed = json.loads(match.group()) if match else {"answer": raw_response, "claims": []}
-
-    # Map index → source_label thật
-    claims = []
-    for c in parsed.get("claims", []):
-        idx = c.get("source_chunk_index")
-        if idx and 1 <= idx <= len(chunks):
-            claims.append({"claim": c["claim"], "source_label": chunks[idx-1]["source_label"], "chunk_id": chunks[idx-1]["db_chunk_id"]})
-        else:
-            claims.append({"claim": c["claim"], "source_label": None, "chunk_id": None})
-
-    grounded = sum(1 for c in claims if c["source_label"])
-    grounded_ratio = grounded / len(claims) if claims else 0.0
-    retrieval_score = chunks[0]["score"] if chunks else 0.0
-
-    return {
-        "answer_text": parsed["answer"],
-        "claims": claims,
-        "retrieval_score": retrieval_score,
-        "grounded_ratio": grounded_ratio,
-        "latency_ms": int((time.time() - start) * 1000)
-    }
-
-
-def _mock_generate(question: str, chunks: list[dict], start: float) -> dict:
-    """Fallback đa dạng để test UI 3 mode khác nhau."""
-    latency_ms = int((time.time() - start) * 1000) + 300
-    if chunks:
-        return {
-            "answer_text": f"[DEMO] Dựa vào tài liệu ({chunks[0]['source_label']}): Lỗi liên quan đến '{question[:40]}' có thể tìm hiểu tại {chunks[0]['source_label']}. Hãy kiểm tra lại file `.env` và đảm bảo API key đã được khai báo đúng.",
-            "claims": [
-                {"claim": f"Thông tin từ {chunks[0]['source_label']}", "source_label": chunks[0]["source_label"], "chunk_id": chunks[0]["db_chunk_id"]},
-                {"claim": "Chi tiết bổ sung chưa có trong tài liệu hiện tại", "source_label": None, "chunk_id": None}
-            ],
-            "retrieval_score": chunks[0]["score"],
-            "grounded_ratio": 0.5,
-            "latency_ms": latency_ms
-        }
-    return {
-        "answer_text": "[DEMO] Không tìm thấy tài liệu liên quan. Câu hỏi này nằm ngoài phạm vi nội dung bài học — đề nghị hỏi Coach để được giải đáp chính xác.",
-        "claims": [],
-        "retrieval_score": 0.0,
-        "grounded_ratio": 0.0,
-        "latency_ms": latency_ms
-    }
-```
+> **Đã thay thế bởi §7A (Multi-Provider LLM Rotation).** Mục 7.3 gốc (bản chỉ dùng OpenRouter,
+> không có Groq/Gemini) đã bị patch v4.0 ở §7A ghi đè hoàn toàn — code thực tế trong
+> `services/generation.py` theo đúng §7A. Đánh số mục vẫn giữ nguyên (7.4/7.5/7.6 tiếp theo)
+> để không phải sửa các tham chiếu chéo trong tài liệu.
 
 ### 7.4. Confidence (services/confidence.py)
 
@@ -1096,33 +989,9 @@ latency: 1.2s        latency: 1.4s            latency: 0.3s
 
 ---
 
-## 11. REQUIREMENTS.TXT
-
-```
-fastapi==0.115.0
-uvicorn[standard]==0.30.6
-sqlalchemy==2.0.35
-pydantic==2.9.2
-passlib[bcrypt]==1.7.4
-python-jose[cryptography]==3.3.0
-python-dotenv==1.0.1
-openai>=1.50.0
-sentence-transformers==3.2.1
-numpy>=1.24.0
-python-multipart==0.0.12
-pymupdf==1.24.11
-```
-
-> **Không có `anthropic`, không có `chromadb`.**
-
----
-
-## 12. .ENV.EXAMPLE
-
-```
-OPENROUTER_API_KEY=sk-or-...
-JWT_SECRET_KEY=change-this-in-production-use-long-random-string
-```
+> **Mục 11 và 12 gốc (requirements.txt / .env.example bản v3.0, chỉ có OpenRouter) đã được
+> thay thế hoàn toàn bởi §17 và §18 bên dưới (bản v4.0 đầy đủ Groq + OpenRouter + Gemini).
+> Dùng §17/§18 làm chuẩn, không dùng nội dung cũ.**
 
 ---
 
@@ -1320,6 +1189,8 @@ Ghi link này vào `docs/prototype-link.md` để BGK bấm trực tiếp.
 
 ## 17. REQUIREMENTS.TXT (hoàn chỉnh v4.0)
 
+> Thay thế mục 11 (bản v3.0 cũ) đã gỡ ở trên — dùng danh sách này làm chuẩn.
+
 ```
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
@@ -1341,6 +1212,8 @@ pymupdf==1.24.11
 ---
 
 ## 18. .ENV.EXAMPLE (hoàn chỉnh v4.0)
+
+> Thay thế mục 12 (bản v3.0 cũ, chỉ có `OPENROUTER_API_KEY`) đã gỡ ở trên — dùng danh sách này làm chuẩn.
 
 ```
 # ── LLM Providers (thêm càng nhiều càng tốt, thiếu provider nào thì skip) ──

@@ -30,3 +30,6 @@ chroma_db/
 
 # Slide renders
 prototype/frontend/public/slides/
+
+# Ảnh chụp màn hình tạm/debug trong lúc làm việc — không phải design asset chính thức
+assets/mockups/

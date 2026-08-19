@@ -1,0 +1,95 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.questionBox {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  border-left: 4px solid var(--color-primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.modeCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+
+.cardHeader {
+  padding: 16px;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader h4 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--color-primary);
+}
+
+.latency {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+
+.cardBody {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.answerText {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.metrics {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px dashed var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.pendingEscalation {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.matchedQ {
+  background-color: var(--color-bg);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
