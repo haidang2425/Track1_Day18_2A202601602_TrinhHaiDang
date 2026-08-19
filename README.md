@@ -14,6 +14,24 @@
 | 2 | Nguyễn Việt Hải | 2A202601656 |
 | 3 | Trịnh Hải Đăng | 2A202601602 |
 
+## Tài liệu liên quan trong repo
+
+| Deliverable | File |
+|---|---|
+| Three Solution Options (bảng chuẩn hóa) | [docs/three-option-design-sheet.md](docs/three-option-design-sheet.md) |
+| Cách chạy prototype (link A/B/C) | [docs/prototype-link.md](docs/prototype-link.md) |
+| Prototype Feedback Note (Chặng 6) | [docs/prototype-feedback-note.md](docs/prototype-feedback-note.md) |
+| Group Feedback Synthesis (Chặng 6) | [docs/group-feedback-synthesis.md](docs/group-feedback-synthesis.md) |
+| AI Support Log | [docs/ai-support-log.md](docs/ai-support-log.md) |
+| Transcript phỏng vấn usability test | [docs/interviews/](docs/interviews/) |
+| Đề bài gốc (không chỉnh sửa) | [docs/assignment-brief.md](docs/assignment-brief.md) |
+
+## Đóng góp của tôi trong nhóm (Trịnh Hải Đăng)
+
+> *(Để điền — ghi cụ thể phần bạn chịu trách nhiệm: option nào, shared context/content, Human–AI decisions, facilitation, observation hay tổng hợp feedback. Đây là phần phản ánh cá nhân, cần tự viết theo yêu cầu "Không được dùng AI để... viết thay phần đóng góp và reflection cá nhân".)*
+
+...
+
 ## Chặng 1: Evidence huddle và chốt Hypothesis Problem
 
 ### Phần 1. Evidence huddle
@@ -209,3 +227,259 @@ Nhóm xin lưu ý rằng không option nào bị làm yếu đi một cách cố
 Câu hỏi nhóm mang vào buổi thử nghiệm là: khi learner đang kẹt và cần một câu trả lời đáng tin, họ muốn tự mình cầm quyền phán đoán, muốn hệ thống tự thú nhận giới hạn rồi mở đường sang người thật, hay muốn nhận sẵn một câu trả lời đã có người bảo chứng.
 
 Kết quả mà nhóm mong đợi là một quyết định thiết kế cho bước tiếp theo, không phải một tuyên bố rằng phương án nào đó đã được validated.
+
+## Chặng 3: Human và AI Design pass
+
+Phạm vi của chặng này chỉ gói trong đúng một khoảnh khắc cần mang đi test, chứ không phải toàn bộ sản phẩm. Nhóm cũng không thêm một màn hình riêng cho mỗi tiêu chí, mà chỉ trả lời bốn nhóm câu hỏi thiết kế ngay trên khoảnh khắc đó.
+
+**Critical interaction mà nhóm chọn để review:** Learner đang làm bài lab, kẹt ở bước 3 khi cài đặt môi trường, coach lúc đó đang bận với người khác. Learner mở phần trợ giúp và nhận về một câu trả lời. Toàn bộ phần thiết kế dưới đây chỉ xoay quanh đúng lượt trả lời này và những gì xảy ra ngay sau đó.
+
+Lý do nhóm chọn đúng khoảnh khắc này là vì cả ba option chỉ khác nhau ở đây. Trước lượt trả lời thì ba bản giống hệt nhau, còn sau lượt trả lời thì learner đã bước vào một trong ba nhánh khác nhau.
+
+### Phần 1. Bốn quyết định thiết kế
+
+#### 1.1. Expectation
+
+Trước khi AI hoạt động, learner cần hiểu rõ nó sắp làm gì và không làm được gì, vì nếu để giao diện hứa nhiều hơn năng lực thật thì niềm tin sẽ bị đặt sai chỗ ngay từ đầu.
+
+Với Option A, hệ thống nói trước rằng nó chỉ trả lời dựa trên tài liệu của khóa học, và những phần nằm ngoài tài liệu sẽ được đánh dấu lại chứ không giấu đi. Giới hạn cần nói thẳng là với lỗi cài đặt môi trường trên máy cá nhân thì tài liệu khóa thường không chứa câu trả lời, nên phần lớn nội dung sẽ rơi vào nhóm không neo được.
+
+Với Option B, hệ thống nói trước rằng nó sẽ tự đánh giá mức độ chắc chắn của chính mình, và khi thấy không chắc thì sẽ đề nghị chuyển câu hỏi sang coach. Giới hạn cần nói thẳng là mức chắc chắn đó chỉ là ước lượng của chính hệ thống, không phải một bảo chứng từ người thật.
+
+Với Option C, hệ thống nói trước rằng thứ learner sắp đọc là câu trả lời đã có coach duyệt, kèm theo thời điểm duyệt. Giới hạn cần nói thẳng là trong giai đoạn đầu thư viện còn ít câu, nên có những bước chưa có gì để đưa lên, và khi đó learner sẽ nhận một câu trả lời chưa qua duyệt kèm nhãn ghi rõ điều đó.
+
+#### 1.2. Role and Agency
+
+Nhóm dựa vào chi phí khi sai để quyết định mức tự chủ, chứ không dựa vào cảm giác phương án nào thông minh hơn. Ở bối cảnh học tập này, learner tin nhầm một câu trả lời sai thì lỗ hổng kiến thức chỉ lộ ra rất muộn và không có cách nào hoàn tác, nên đây là loại sai vừa đắt vừa khó phát hiện.
+
+Option A đặt AI ở mức không tự hành động. AI chỉ trả lời khi được gọi và tuyệt đối không phán đoán hộ learner rằng câu trả lời này đáng tin đến đâu. Toàn bộ quyền phán đoán nằm ở learner. Nhóm chọn mức này vì AI không có cơ sở đáng tin để tự chấm điểm mình, nên thà không nói gì còn hơn nói sai.
+
+Option B đặt AI ở mức hỏi lại. AI tự khai mức chắc chắn rồi hỏi learner có muốn gửi câu hỏi sang coach hay không, chứ không tự động gửi. Nhóm không cho AI tự gửi vì mỗi câu gửi đi đều chiếm thời gian của coach, và ngay cả khi ẩn danh thì việc gửi vẫn là một hành động có hệ quả mà learner nên được quyết định.
+
+Option C đặt AI ở mức tự hành động, nhưng chỉ tự hành động ở khâu đưa nội dung lên chứ không tự hành động ở khâu sinh nội dung. Thứ được đưa lên là câu trả lời đã có người thật duyệt từ trước, nên chi phí khi sai thấp hơn hẳn. Dù vậy nhóm ghi nhận một rủi ro riêng của phương án này: việc hệ thống chủ động can thiệp đi ngược lại thói quen để learner tự xoay xở của coach.
+
+Về hậu quả khi AI sai, ba option chịu ba kiểu thiệt hại khác nhau. Ở Option A, nếu phần neo nguồn trích sai đoạn thì learner có thể tin nhầm, nhưng vì nguồn hiện ngay trước mặt nên learner còn cơ hội tự phát hiện. Ở Option B, nếu AI báo chắc chắn mà thực ra sai thì đây là trường hợp nặng nhất, vì learner được trấn an rồi đi tiếp và gần như không có cách nào phát hiện. Ở Option C, nếu hệ thống khớp nhầm câu hỏi thì learner sẽ đọc một câu trả lời đúng nhưng dành cho vấn đề khác, và điều này lộ ra khá nhanh vì nó không giải quyết được việc đang làm.
+
+#### 1.3. Evidence and Uncertainty
+
+Learner cần biết hệ thống đang dựa vào cái gì để nói, chứ không chỉ biết nó nói gì.
+
+Option A cho thấy bằng chứng dưới dạng trích dẫn về đúng đoạn trong tài liệu khóa học, đặt cạnh từng ý trong câu trả lời. Những ý không tìm được trong tài liệu sẽ mang nhãn ghi rõ là nằm ngoài tài liệu khóa. Mức không chắc ở đây không được diễn đạt thành một con số, mà được thể hiện bằng chính sự vắng mặt của phần trích dẫn.
+
+Option B chia mức chắc chắn thành ba nhóm thay vì hiển thị phần trăm, gồm neo được đầy đủ vào tài liệu, chỉ neo được một phần, và không neo được. Nhóm chọn cách phân loại theo nhóm vì một con số phần trăm sẽ tạo cảm giác chính xác giả tạo. Khi rơi vào nhóm thấp nhất, hệ thống mới đề nghị chuyển câu hỏi sang coach.
+
+Option C cho thấy bằng chứng dưới dạng nguồn gốc của câu trả lời, cụ thể là ai đã duyệt, duyệt vào lúc nào, và câu này đã được dùng lại bao nhiêu lần. Khi chưa có câu nào được duyệt cho bước đang làm, hệ thống nói thẳng rằng đây là câu chưa qua duyệt chứ không im lặng đưa ra như thể nó đã được xác nhận.
+
+#### 1.4. Control and Recovery
+
+Option A cho learner mở rộng hoặc thu gọn phần nguồn, và bỏ qua toàn bộ câu trả lời nếu thấy không dùng được. Đường phục hồi là learner quay lại cách cũ, tức là chờ tới lượt hỏi coach. Nhóm ghi nhận đây là điểm yếu rõ nhất của Option A, vì nó không mở thêm bất kỳ đường thoát mới nào so với hiện trạng.
+
+Option B cho learner từ chối lời đề nghị gửi câu hỏi, sửa lại nội dung câu hỏi trước khi gửi, và rút lại câu đã gửi nếu tự tìm ra đáp án trong lúc chờ. Learner cũng được đi làm bước khác trong lúc chờ thay vì phải đứng yên. Đường phục hồi là khi coach trả lời, hệ thống đưa learner quay lại đúng bước đang làm dở kèm theo câu hỏi ban đầu.
+
+Option C cho learner đóng gợi ý, đánh dấu là không liên quan, tự tìm câu khác trong thư viện, hoặc đặt một câu hỏi mới nếu thư viện không có gì phù hợp. Đường phục hồi nằm ngay ở thao tác đánh dấu không giải quyết được, vì thao tác này sẽ đẩy trường hợp đó sang hàng chờ của coach thay vì để learner tự chịu.
+
+### Phần 2. Human và AI Decision Table
+
+| Human và AI decision | Option A: Neo nguồn | Option B: Tự khai mức chắc và chuyển tiếp | Option C: Đã được người thật duyệt |
+|---|---|---|---|
+| User làm gì và AI làm gì | AI sinh câu trả lời rồi neo từng ý về đúng đoạn trong tài liệu khóa. Learner đọc phần neo đó và tự quyết định tin hay không tin | AI sinh câu trả lời, tự phân loại mức chắc chắn, và soạn sẵn nội dung câu hỏi để gửi coach. Learner quyết định có gửi hay không rồi đi làm bước khác trong lúc chờ | Hệ thống khớp bước đang làm với câu trả lời đã được coach duyệt rồi đưa lên. Learner đọc và đánh dấu là có giải quyết được hay không |
+| AI tự làm, hỏi lại hay không tự làm, và vì sao | Không tự làm. AI không phán đoán độ tin cậy vì nó không có cơ sở đáng tin để tự chấm điểm mình, và sai ở khâu này thì rất khó phát hiện | Hỏi lại. AI có tín hiệu để nghi ngờ chính mình nhưng chưa đủ chắc, mà mỗi lần gửi đi lại tốn thời gian của coach, nên quyền quyết định phải thuộc về learner | Tự làm, nhưng chỉ tự làm ở khâu đưa nội dung lên chứ không tự sinh nội dung. Thứ được đưa lên đã có người thật duyệt nên chi phí khi sai thấp |
+| Learner hiểu capability và limit bằng gì | Câu giới thiệu nói rõ hệ thống chỉ dựa trên tài liệu khóa, kèm cảnh báo rằng lỗi môi trường trên máy cá nhân thường nằm ngoài phạm vi đó | Câu giới thiệu nói rõ mức chắc chắn là tự đánh giá của hệ thống chứ không phải bảo chứng của người thật | Nhãn nguồn gốc trên từng câu trả lời cho biết đây là câu đã duyệt hay chưa duyệt, và duyệt từ khi nào |
+| Bằng chứng và mức không chắc được thể hiện thế nào | Trích dẫn đặt cạnh từng ý. Ý nào không có trích dẫn thì mang nhãn nằm ngoài tài liệu khóa | Ba nhóm mức chắc chắn là neo được đầy đủ, neo được một phần, và không neo được. Nhóm không dùng phần trăm để tránh tạo cảm giác chính xác giả tạo | Tên người duyệt, thời điểm duyệt và số lần câu trả lời đã được dùng lại. Khi chưa có câu duyệt thì hệ thống nói thẳng là chưa qua duyệt |
+| Learner kiểm soát và phục hồi thế nào | Mở rộng hoặc thu gọn phần nguồn, bỏ qua câu trả lời. Đường phục hồi vẫn là chờ hỏi coach như hiện trạng, và đây là điểm yếu rõ nhất của phương án | Từ chối gửi, sửa nội dung trước khi gửi, rút lại câu đã gửi. Khi coach trả lời thì hệ thống đưa learner quay lại đúng bước đang làm dở | Đóng gợi ý, đánh dấu không liên quan, tìm câu khác trong thư viện, hoặc đặt câu hỏi mới. Thao tác đánh dấu không giải quyết được sẽ tự đẩy sang hàng chờ coach |
+
+### Phần 3. Feedback and data check
+
+Phần này chỉ áp dụng cho những option có dùng dữ liệu của learner hoặc có học từ phản hồi, và ở đây là Option B với Option C.
+
+#### 3.1. Feedback ảnh hưởng tới đâu
+
+Với Option A, hệ thống không ghi nhớ gì. Câu trả lời được sinh ra từ tài liệu khóa, không lưu lại lịch sử và không dùng để cải thiện lần sau. Đây là phương án ít chạm vào dữ liệu learner nhất.
+
+Với Option B, phản hồi ảnh hưởng tới chính phiên hiện tại. Câu hỏi được gửi sang coach và câu trả lời của coach quay lại đúng phiên đó cho đúng learner đã hỏi. Hệ thống không dùng câu hỏi này để huấn luyện gì thêm.
+
+Với Option C, phản hồi ảnh hưởng tới những người dùng sau. Câu hỏi và câu trả lời sau khi coach duyệt sẽ đi vào thư viện dùng chung, nghĩa là learner khác sẽ đọc lại nội dung xuất phát từ tình huống của mình.
+
+#### 3.2. Dữ liệu nào được dùng và learner rút quyền bằng cách nào
+
+Với Option B, dữ liệu được dùng là nội dung câu hỏi cùng bước đang làm dở. Nhóm lưu ý một điểm cần cẩn thận: hệ thống chỉ nên hứa đúng mức ẩn danh mà nó thực sự làm được. Câu hỏi có thể ẩn danh với các learner khác, nhưng coach vẫn có khả năng đoán ra người hỏi khi lớp ít người, nên giao diện phải nói rõ điều này thay vì hứa ẩn danh tuyệt đối. Learner được xem trước toàn bộ nội dung sắp gửi, được sửa, và được rút lại câu đã gửi khi coach chưa trả lời.
+
+Với Option C, dữ liệu được dùng là câu hỏi và câu trả lời sẽ vào thư viện chung. Learner phải được hỏi trước khi nội dung đó được đưa vào thư viện, chứ không phải được thông báo sau. Learner cũng có quyền yêu cầu gỡ phần đóng góp của mình khỏi thư viện về sau.
+
+### Phần 4. Tự kiểm theo Gate 3
+
+| Tiêu chí | Kết quả | Căn cứ |
+|---|---|---|
+| Mỗi option nói rõ user làm gì và AI làm gì | Đạt | Dòng đầu của Decision Table tách bạch phần việc của hai bên trong cả ba option |
+| Mức tự chủ phù hợp với hậu quả khi sai | Đạt | Sai ở đây vừa đắt vừa khó phát hiện, nên không option nào để AI tự quyết thay learner. A không tự làm, B hỏi lại, còn C chỉ tự làm với nội dung đã có người thật duyệt |
+| Mỗi option có ít nhất một đường kiểm soát hoặc phục hồi | Đạt | A cho bỏ qua và mở nguồn để tự kiểm, B cho từ chối, sửa và rút lại, C cho đóng gợi ý và đánh dấu không giải quyết được để đẩy sang coach |
+| Có nói rõ capability và limit trước khi AI hoạt động | Đạt | Cả ba option đều có một câu nói trước về phạm vi và giới hạn, viết ở mục 1.1 |
+| Mức không chắc được thể hiện ra ngoài | Đạt | A thể hiện bằng sự vắng mặt của trích dẫn, B bằng ba nhóm mức chắc, C bằng nhãn đã duyệt hay chưa duyệt |
+| Dữ liệu và phản hồi được nói rõ, learner rút quyền được | Đạt | A không lưu gì, B chỉ ảnh hưởng phiên hiện tại và cho rút lại, C hỏi trước khi đưa vào thư viện chung và cho gỡ về sau |
+
+Điểm nhóm muốn quan sát kỹ nhất là phản ứng của learner với mức không chắc. Ở Option B, nếu hệ thống báo không chắc quá thường xuyên thì tín hiệu sẽ thành nhiễu và learner bỏ qua hết, nhưng nếu báo quá ít thì learner lại rơi đúng vào tình trạng buộc phải tin như hiện nay. Nhóm chưa biết ngưỡng nào là hợp lý, và đây là thứ chỉ có thể học được từ hành vi thật chứ không suy ra được trên giấy.
+
+## Chặng 4: Build ba micro-prototype
+
+Ba micro-prototype (Option A/B/C) đã được build tích hợp trực tiếp vào UI của Dashboard (chuyển qua dropdown), dùng chung context, content fixture và visual components theo đúng luật giữ 70% chung đã đặt ra ở Chặng 2. Chi tiết kiến trúc, cách cài đặt và link truy cập nằm ở [prototype-link.md](docs/prototype-link.md); kiến trúc/API/data model đầy đủ nằm ở [docs/PROJECT.md](docs/PROJECT.md).
+
+## Chặng 5: Chuẩn bị test
+
+Nhóm đã dựng xong ba bản micro prototype của option A, B và C. Ở chặng này nhóm sẽ làm ba việc. Việc thứ nhất là chốt câu hỏi để biết người tham gia có từng gặp tình huống liên quan hay chưa. Việc thứ hai là chốt nhiệm vụ sẽ giao cho họ. Việc thứ ba là chốt luật dẫn buổi thử. Nhóm không sửa bản nháp trong chặng này.
+
+**Tình huống dùng chung cho cả ba bản:** Cả ba bản micro prototype đều đặt người học vào cùng một tình huống. Người học đang xem slide 4 của bài Day 18 và gặp một chỗ chưa rõ về việc thế nào là ba cơ chế khác nhau. Người học hỏi trợ giảng AI câu sau: nhóm em làm ba bản chỉ khác chỗ hiện thông báo, vậy có tính là ba cơ chế không.
+
+Ba bản dùng chung đúng một câu hỏi này và đúng một câu trả lời gốc. Câu trả lời gốc có ba ý. Hai ý đầu dẫn được về slide 4 và slide 7 trong bài học. Ý thứ ba thì bài học không nói tới.
+
+Điểm đáng chú ý của tình huống này nằm ở chỗ ý mà người học cần nhất lại chính là ý không có gì trong bài chống lưng. Ba bản khác nhau ở cách chúng xử lý riêng ý thứ ba đó.
+
+### Phần 1. Chốt bối cảnh và nhiệm vụ
+
+#### 1.1. Bảng câu hỏi phỏng vấn
+
+Kịch bản dẫn buổi thử: bảng câu hỏi theo thứ tự. Bảng này dành cho người dẫn cầm theo trong lúc thử. Cột thứ ba là lời để đọc gần như nguyên văn. Cột thứ tư nói rõ mục đích và những chỗ cần cẩn thận.
+
+**a. Mở đầu và xin phép**
+
+| Thứ tự | Nói lúc nào | Người dẫn nói gì | Mục đích và lưu ý |
+|---|---|---|---|
+| 1 | Ngay khi bắt đầu | Chào bạn. Nhóm mình đang làm một bài tập về thiết kế sản phẩm. Hôm nay mình muốn nhờ bạn thử ba bản nháp và nói to suy nghĩ của bạn trong lúc thử. | Người dẫn không nói đây là sản phẩm của nhóm và cũng không nói bản nào do nhóm tâm đắc, để người tham gia không khen cho vừa lòng. |
+| 2 | Ngay sau câu 1 | Ba bản này còn rất thô, vẽ tay và chưa chạy thật. Bạn cứ chê thoải mái, chê càng thẳng thì càng giúp được nhóm mình. | Câu này hạ kỳ vọng về hình thức, để người tham gia tập trung vào cách hoạt động thay vì bình luận màu sắc và bố cục. |
+| 3 | Trước khi bấm gì | Mình xin phép ghi màn hình và ghi âm buổi này được không. Bản ghi chỉ dùng trong nội bộ bài tập của nhóm mình thôi. | Người dẫn phải chờ người tham gia đồng ý rõ ràng rồi mới bật ghi. |
+
+**b. Hỏi về bối cảnh, tối đa hai phút**
+
+| Thứ tự | Nói lúc nào | Người dẫn nói gì | Mục đích và lưu ý |
+|---|---|---|---|
+| 4 | Trước khi mở bản nháp | Trong bảy ngày gần đây, bạn có lần nào hỏi một công cụ AI về nội dung bài học rồi không biết câu trả lời đó có đúng hay không, không? | Đây là câu sàng lọc duy nhất. Câu này hỏi về chuyện đã xảy ra, không hỏi thói quen chung. |
+| 5 | Chỉ hỏi khi câu 4 được trả lời là có | Lần gần nhất là chuyện gì vậy, và sau đó bạn làm gì? | Người ghi chép lại càng sát nguyên văn càng tốt. Về sau nhóm đối chiếu lời kể này với hành vi của chính họ trong lúc thử. |
+| 6 | Chỉ hỏi khi câu 4 được trả lời là chưa từng | Không sao cả, mình vẫn thử tiếp nhé. | Người dẫn không hỏi thêm và không cố khơi ra một câu chuyện. Người ghi đánh dấu người này không có bối cảnh liên quan. |
+
+**c. Giao nhiệm vụ, đọc nguyên văn cho cả ba bản**
+
+| Thứ tự | Nói lúc nào | Người dẫn nói gì | Mục đích và lưu ý |
+|---|---|---|---|
+| 7 | Trước bản đầu tiên | Bạn đang học slide 4 và đang chuẩn bị bài cho nhóm mình. Bạn có một câu hỏi, và bạn cần biết câu trả lời có dùng được hay không trước khi mang vào bài nhóm. Trong tình huống này, bạn hãy dùng bản này để đi tới chỗ mà bạn thấy đủ chắc để học tiếp. Nếu bạn thấy mình không thể chắc thêm được nữa thì bạn cứ dừng lại, như vậy cũng được. | Vế cuối là phần bắt buộc phải đọc. Nếu bỏ vế này thì người tham gia sẽ cố bấm cho ra kết quả để làm vừa lòng người dẫn. |
+| 8 | Trước bản thứ hai và bản thứ ba | Giờ mình chuyển sang bản tiếp theo nhé. Nhiệm vụ vẫn y như lúc nãy. | Người dẫn không đổi một chữ nào trong nhiệm vụ và không mô tả bản mới có gì khác. |
+
+**d. Trong lúc người tham gia đang thử**
+
+Ba câu đầu là câu cứu hộ, dùng đi dùng lại được cho cả ba bản. Các câu còn lại chỉ dùng khi đúng tình huống xảy ra.
+
+| Thứ tự | Nói lúc nào | Người dẫn nói gì | Mục đích và lưu ý |
+|---|---|---|---|
+| 9 | Khi người tham gia im lặng và có vẻ lúng túng | Bạn cứ nói to suy nghĩ của mình nhé. | Người dẫn phải đếm thầm tới mười trước khi nói câu này. Im lặng không phải lúc nào cũng là lúng túng. |
+| 10 | Khi người tham gia dừng lại và chờ hướng dẫn | Bạn sẽ làm gì tiếp theo? | Người dẫn đẩy quyền quyết định về lại cho người tham gia thay vì gợi ý. |
+| 11 | Khi người tham gia hỏi hệ thống hoạt động ra sao | Theo bạn, nó nên hoạt động như thế nào? | Người dẫn không xác nhận và không phủ nhận. Câu trả lời của họ chính là dữ liệu về mô hình mà họ đang hình dung trong đầu. |
+| 12 | Khi người tham gia khen bản nháp hoặc khen ý tưởng | Bản này còn thô lắm. Mà lúc nãy bạn bấm vào chỗ đó vì nghĩ nó sẽ ra cái gì vậy? | Người dẫn gạt lời khen sang một bên rồi kéo ngay về việc vừa xảy ra. |
+| 13 | Khi người tham gia đề xuất thêm tính năng | Nếu có cái đó thì nó giúp bạn ở đúng chỗ nào trong lúc nãy? | Người dẫn không bàn về tính năng, mà đào ngược về công việc mà người tham gia đang mắc. |
+| 14 | Ở bản A, khi họ mở chỗ dẫn rồi đóng rất nhanh | Lúc nãy bạn mở chỗ dẫn rồi đóng ngay, lúc đó bạn đang tìm cái gì vậy? | Câu này phân biệt việc đọc thật với việc mở ra cho có. |
+| 15 | Ở bản A, sau khi họ chọn vẫn tin hoặc bỏ qua ở ý thứ ba | Lúc nãy bạn chọn như vậy. Bạn dựa vào cái gì để chọn? | Đây là chỗ quan trọng nhất của bản A, vì ý thứ ba không có gì trong bài chống lưng. |
+| 16 | Ở bản B, sau khi họ bấm gửi hoặc bấm thôi | Bạn nghĩ gì ngay trước lúc bấm nút đó? | Câu này hỏi về khoảnh khắc vừa xảy ra, không hỏi về ý định chung chung. |
+| 17 | Ở bản B, trong lúc chờ coach trả lời | Bây giờ bạn định làm gì? | Người dẫn không gợi ý là hãy học tiếp. Việc họ chờ, học tiếp, hay mở công cụ khác đều là dữ liệu. |
+| 18 | Ở bản B, sau khi đọc câu trả lời của coach | Câu này với câu lúc nãy của trợ giảng, bạn thấy khác nhau ở chỗ nào? | Câu này kiểm tra xem người thật có mang lại thứ gì mà máy không mang lại được hay không. |
+| 19 | Ở bản C, ngay sau khi trợ giảng tự mở lên | Trên màn hình này bạn có để ý dòng nào không, và dòng đó nói gì? | Người dẫn tuyệt đối không chỉ vào dòng ghi coach đã duyệt. Việc họ có tự nhận ra hay không chính là thứ cần đo. |
+| 20 | Ở bản C, khi họ gặp câu chưa ai duyệt | Bây giờ bạn định làm gì? | Đây là chỗ yếu nhất của bản C, khi kho chưa có câu cho trường hợp riêng. |
+
+**e. Kết thúc buổi**
+
+| Thứ tự | Nói lúc nào | Người dẫn nói gì | Mục đích và lưu ý |
+|---|---|---|---|
+| 21 | Sau khi thử xong cả ba bản | Nếu tuần sau bạn học một bài khó và chỉ được dùng một trong ba bản vừa rồi, bạn chọn bản nào? | Câu này hỏi về một chuyện chưa xảy ra, nhưng vẫn dùng được vì người tham gia đang chọn giữa ba thứ họ vừa tự tay bấm thử. |
+| 22 | Ngay sau câu 21 | Cái gì trong lúc bạn vừa thử đã làm bạn chọn như vậy, và bạn phải chịu thiệt gì khi chọn bản đó? | Đây mới là câu quan trọng. Nếu người tham gia không nói ra được cái giá phải trả thì lựa chọn ở câu 21 chỉ được ghi như một lời khen, không tính là dữ liệu. |
+| 23 | Khi họ đã trả lời xong câu 22 | Có chỗ nào trong ba bản vừa rồi làm bạn thấy khó chịu mà nãy giờ bạn chưa nói ra không? | Câu này mở đường cho những điều họ giữ lại vì ngại. Người dẫn hỏi xong thì im lặng chờ. |
+| 24 | Đóng buổi | Cảm ơn bạn nhiều. Nhóm mình dùng đúng những gì bạn vừa làm để sửa lại bản nháp. | Người dẫn không giải thích bản nào nhóm định chọn và không hỏi thêm gì sau câu này. |
+
+**f. Năm câu tuyệt đối không được hỏi**
+
+| Câu không được hỏi | Vì sao hỏng | Câu dùng thay |
+|---|---|---|
+| Bạn thấy bản này có hay không | Câu này chỉ thu về ý kiến nói cho lịch sự | Xem câu số 14 |
+| Bạn có tin câu trả lời của AI không | Câu này hỏi về thái độ chung chung, ai cũng trả lời được mà không nói lên điều gì | Xem câu số 15 |
+| Nếu có nút gửi cho coach thì bạn có dùng không | Câu này hỏi về một chuyện chưa xảy ra nên câu trả lời gần như luôn là có | Xem câu số 16 |
+| Việc ghi rõ coach đã duyệt có làm bạn yên tâm hơn không | Câu này mớm sẵn kết luận mà nhóm đang mong đợi | Xem câu số 19 |
+| Bản nào tốt nhất | Câu này ép người tham gia xếp hạng thay vì nói ra tiêu chí của họ | Xem câu số 21 và 22 |
+
+#### 1.2. Nhiệm vụ giao cho người tham gia
+
+Nhiệm vụ được viết theo kết quả cần đạt, không viết theo nút cần bấm. Nhiệm vụ cũng cho phép người tham gia dừng lại giữa chừng mà vẫn được tính là hợp lệ.
+
+Người dẫn đọc nguyên văn như sau cho người tham gia nghe: "Bạn đang học slide 4 và đang chuẩn bị bài cho nhóm mình. Bạn có một câu hỏi, và bạn cần biết câu trả lời có dùng được hay không trước khi mang vào bài nhóm. Trong tình huống này, bạn hãy dùng từng bản để đi tới chỗ mà bạn thấy đủ chắc để học tiếp. Nếu bạn thấy mình không thể chắc thêm được nữa thì bạn cứ dừng lại, như vậy cũng được."
+
+Và cuối là phần quan trọng nhất. Nếu nhiệm vụ chỉ nói là hãy tìm câu trả lời thì người tham gia sẽ cố bấm cho ra một kết quả nào đó để làm vừa lòng người dẫn. Khi nhiệm vụ nói rõ rằng dừng lại vì không chắc thêm được cũng là một kết cục hợp lệ, nhóm mới nhìn được hành vi thật.
+
+Cả ba bản dùng đúng một nhiệm vụ này. Người dẫn không đổi một chữ nào giữa các bản.
+
+#### 1.3. Thứ tự cho từng người thử
+
+Nhóm đảo thứ tự ba bản giữa những người tham gia khác nhau. Người thứ nhất thử theo thứ tự A, B rồi C. Người thứ hai thử theo thứ tự B, C rồi A. Người thứ ba thử theo thứ tự C, A rồi B.
+
+Lý do là bản được thử đầu tiên thường bị đánh giá thiệt hơn hai bản sau, vì lúc đó người tham gia còn đang làm quen với tình huống. Ngoài ra, người dẫn chỉ gọi là bản A, bản B và bản C. Người dẫn không đọc tên mô tả của từng bản, để tránh gợi ý trước bản nào tốt hơn.
+
+#### 1.4. Năm thứ nhóm sẽ quan sát
+
+Nhóm chọn đúng năm thứ để quan sát và bỏ hẳn những thứ còn lại, để buổi thử không bị loãng.
+
+| Thứ nhóm quan sát | Người ghi cần nhìn cái gì | Thứ này giúp nhóm phân biệt điều gì |
+|---|---|---|
+| Việc đầu tiên người tham gia làm | Người ghi nhìn xem người tham gia làm thao tác gì đầu tiên sau khi câu trả lời hiện ra, tính trong khoảng mười giây đầu | Việc này cho biết phản xạ tự nhiên của họ là đi kiểm chứng, là đọc tiếp, hay là đi tiếp luôn mà không kiểm gì cả |
+| Phần dẫn chứng được đọc hay bị bỏ qua | Ở bản A, người ghi nhìn xem người tham gia có bấm vào chỗ dẫn hay không, và khi mở ra thì họ đọc kỹ đoạn gốc hay chỉ liếc qua rồi bấm nút Khớp. Ở bản B, người ghi nhìn xem họ có đọc dòng trợ giảng tự chấm là chưa chắc hay không. Ở bản C, người ghi nhìn xem họ có để ý dòng ghi tên người duyệt và ngày duyệt hay không | Đây là điều quan trọng nhất của cả buổi, vì nó cho biết cơ chế kiểm chứng có được dùng thật hay chỉ nằm đó cho có |
+| Chỗ người tham gia do dự | Người ghi đánh dấu những chỗ người tham gia dừng lại lâu bất thường, đọc lại một đoạn, hoặc rê chuột qua lại giữa hai lựa chọn trước khi bấm | Việc này chỉ ra đúng chỗ mà quyết định đang khó. Nhóm dự đoán hai chỗ khó nhất là màn ý thứ ba của bản A và màn quyết định gửi hay không gửi của bản B |
+| Cách người tham gia gỡ khi gặp ngõ cụt | Ở bản A, ngõ cụt là ý không có chỗ dẫn. Ở bản B, ngõ cụt là lúc họ từ chối gửi câu hỏi. Ở bản C, ngõ cụt là lúc kho không có câu nào cho trường hợp riêng. Người ghi nhìn xem họ làm gì tiếp sau đó | Việc này cho biết mỗi bản có thật sự mở được một đường đi tiếp hay chỉ đẩy người học về lại tình trạng cũ |
+| Bản được chọn và cái giá phải trả khi chọn | Sau khi thử xong cả ba bản, người tham gia chọn một bản và nói được mình phải chịu thiệt gì khi chọn như vậy | Một lựa chọn mà không kèm cái giá phải trả thì chỉ là lời khen, nhóm không dùng được |
+
+Nhóm cố ý không theo dõi kỹ hai thứ là người tham gia cần trợ giúp ở đâu và họ hiểu nhầm chỗ nào. Lý do là bản nháp này vẽ tay và còn thô, nên phần lớn chỗ khó hiểu sẽ đến từ chất lượng bản vẽ chứ không đến từ cơ chế. Nhóm không muốn dữ liệu bị lấp bởi loại nhiễu đó.
+
+#### 1.5. Câu nhóm cần trả lời và dấu hiệu hỏng của từng bản
+
+| Bản | Câu nhóm cần trả lời | Dấu hiệu cho thấy bản này hỏng |
+|---|---|---|
+| Bản A, có link dẫn chứng | Người học có chịu bấm vào link để tự đi kiểm hay không | Người học đọc lướt rồi tin luôn mà không mở chỗ dẫn nào. Hoặc khi gặp ý không có trong bài thì họ bỏ qua ngay |
+| Bản B, tự nói mình chưa chắc | Dòng chữ chưa chắc có được người học tin hay không, và việc giấu tên có đủ để họ chịu bấm gửi hay không | Người học bỏ qua dòng chữ đó vì nghĩ lần nào cũng thấy. Hoặc họ bấm nút Thôi rồi đi tiếp |
+| Bản C, câu đã có coach duyệt | Việc ghi rõ có người thật đã duyệt có thay được việc tự đi hỏi hay không | Người học thấy việc trợ giảng tự mở lên là phiền. Hoặc khi gặp câu lạ thì kho không giúp được gì cho họ |
+
+### Phần 2. Luật dẫn buổi thử
+
+#### 2.1. Sáu luật và lý do của từng luật
+
+Luật thứ nhất là người tham gia tự điều khiển bản nháp. Người dẫn không cầm chuột và không bấm hộ, kể cả khi người tham gia bấm nhầm chỗ. Chỗ họ bấm nhầm chính là dữ liệu mà nhóm cần.
+
+Luật thứ hai là dùng đúng một nhiệm vụ cho cả ba bản. Nếu người dẫn đổi cách nói giữa các bản thì phản ứng của người tham gia sẽ nói về nhiệm vụ chứ không nói về cơ chế.
+
+Luật thứ ba là không thuyết minh và không giải thích các dòng chữ trên màn hình. Ở bài này, người dẫn không được giải thích dòng không có trong bài của bản A, không được giải thích dòng trợ giảng tự chấm chưa chắc của bản B, và không được giải thích dòng coach đã duyệt của bản C. Việc người tham gia có tự nhận ra những dòng đó hay không chính là thứ nhóm cần đo.
+
+Luật thứ tư là không lấp vào khoảng im lặng. Khi người tham gia dừng lại, người dẫn đếm thầm tới mười rồi mới cân nhắc nói. Phần lớn những câu nói ra sau một khoảng im lặng dài là những câu đáng giá nhất.
+
+Luật thứ năm là không hỏi người tham gia có thích hay không. Câu hỏi về sở thích chỉ thu về lời khen cho lịch sự. Nhóm hỏi về việc họ vừa làm, không hỏi về cảm nhận của họ.
+
+Luật thứ sáu là khi người tham gia hỏi ngược về cách hệ thống hoạt động, người dẫn hỏi lại chứ không trả lời. Ví dụ khi họ hỏi coach có biết ai gửi câu hỏi hay không, người dẫn không giải thích cơ chế giấu tên mà hỏi lại rằng theo bạn thì nó nên hoạt động thế nào.
+
+#### 2.2. Ba câu cứu hộ
+
+Khi người tham gia im lặng quá lâu và có vẻ đang lúng túng, người dẫn nói: "bạn cứ nói to suy nghĩ của mình nhé."
+
+Khi người tham gia dừng lại và chờ người dẫn hướng dẫn, người dẫn nói: "bạn sẽ làm gì tiếp theo?"
+
+Khi người tham gia hỏi về cách hệ thống vận hành, người dẫn nói: "theo bạn, nó nên hoạt động như thế nào?"
+
+Ba câu này dùng đi dùng lại được và không cần đổi cách nói. Người dẫn nên thuộc lòng để không phải nghĩ giữa buổi.
+
+#### 2.3. Ba tình huống dễ gặp trong đúng bài này
+
+Tình huống thứ nhất là người tham gia khen bản vẽ hoặc khen ý tưởng. Người dẫn gạt nhẹ lời khen sang một bên rồi kéo về việc đang làm. Người dẫn có thể nói rằng bản này còn thô lắm, rồi hỏi ngay là bạn vừa bấm vào đó vì nghĩ nó sẽ ra cái gì.
+
+Tình huống thứ hai là người tham gia hỏi cái này có thật không, hoặc hỏi trợ giảng AI lấy thông tin từ đâu. Người dẫn không xác nhận và cũng không phủ nhận, mà hỏi lại rằng theo bạn thì nó nên lấy từ đâu.
+
+Tình huống thứ ba là người tham gia đề xuất thêm tính năng ngay giữa buổi. Người dẫn không bàn về tính năng đó, mà hỏi ngược về việc vừa xảy ra. Người dẫn có thể hỏi rằng nếu có cái đó thì nó giúp bạn ở đúng chỗ nào trong lúc nãy.
+
+#### 2.4. Hai câu hỏi ở cuối buổi
+
+Sau khi người tham gia thử xong cả ba bản, nhóm hỏi hai câu và chỉ hai câu này.
+
+Câu thứ nhất như sau: nếu tuần sau bạn học một bài khó và chỉ được dùng một trong ba bản vừa rồi, bạn chọn bản nào?
+
+Câu thứ hai như sau, và đây mới là câu quan trọng: cái gì trong lúc bạn vừa thử đã làm bạn chọn như vậy, và bạn phải chịu thiệt gì khi chọn bản đó?
+
+Nhóm biết rằng câu thứ nhất là một câu hỏi về tương lai, tức là loại câu mà sách Mom Test khuyên nên tránh. Nhóm vẫn dùng câu này vì người tham gia đang chọn giữa ba thứ mà họ vừa tự tay bấm thử, chứ không phải đang đoán trước một sản phẩm chưa từng thấy — điều Mom Test cảnh báo là hỏi ý kiến về ý tưởng trừu tượng, còn ở đây câu hỏi neo vào hành vi vừa quan sát được. Câu thứ hai mới là câu chống đỡ cho câu thứ nhất: nếu người tham gia không nói ra được cái giá phải trả, lựa chọn ở câu thứ nhất bị hạ xuống thành lời khen, không được tính là evidence.
+
+> *(Ghi chú tổ chức: bản gốc phần này bị cắt ở nguồn khi biên soạn — nếu nhóm còn phần tiếp theo của Chặng 5 hoặc phần Chặng 6/Feedback Notes/AI Support Log, gửi bổ sung để cập nhật đầy đủ.)*

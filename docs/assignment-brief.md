@@ -369,5 +369,5 @@ Next Change có thể là:
 | 3 | Bốn quyết định thiết kế + Human–AI Decision Table + Gate 3 | *(chưa có file riêng — cần bổ sung, ví dụ `human-ai-decision-table.md`)* |
 | 4 | Build micro-prototype + Gate 4 | [prototype-link.md](prototype-link.md) |
 | 5 | Context, task, observation focus, luật facilitation | *(chưa có file riêng — có thể gộp vào đầu `prototype-feedback-note.md` hoặc tách `test-plan.md`)* |
-| 6 | Prototype Feedback Note (×3) + Group Feedback Synthesis + Gate 5 | [prototype-feedback-note.md](prototype-feedback-note.md), [group-feedback-synthesis.md](group-feedback-synthesis.md) |
+| 6 | Prototype Feedback Note (×3) + Group Feedback Synthesis + Gate 5 | [prototype-feedback-note.md](prototype-feedback-note.md), [group-feedback-synthesis.md](group-feedback-synthesis.md) — evidence thô (transcript + ghi âm) ở [interviews/](interviews/) |
 | — | Log việc dùng AI hỗ trợ làm bài (minh bạch, không thuộc rubric Chặng 1–6 ở trên) | [ai-support-log.md](ai-support-log.md) |
