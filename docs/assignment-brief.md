@@ -6,6 +6,29 @@
 
 ---
 
+## Đầu vào từ Day 17
+
+Nhóm tiếp tục đúng case đã làm ở Day 17: AI Tutor, AI Notes hoặc AI Support Radar. Không đổi case chỉ để chọn solution dễ build hơn.
+
+Đặt bốn artifact sau cạnh nhau trước khi bắt đầu:
+
+- Hypothesis Problem của nhóm.
+- Ba Practice Notes, thường là một note từ mỗi thành viên.
+- Solution Parking Lot có tối thiểu năm hướng.
+- Conversation Guide cuối để tham khảo context; Day 18 không tiếp tục problem interview.
+
+Practice interview Day 17 chưa đủ để chứng minh pain đã được validated.
+
+Cuối bài, nhóm được phép kết luận:
+
+> "Với Hypothesis Problem này, chúng tôi đã thử ba cách giải. Tester đã làm…, vì vậy iteration tiếp theo chúng tôi sẽ…"
+
+Nhóm không được kết luận:
+
+> "User đã xác nhận solution này đúng."
+
+---
+
 ## Chặng 1 — Tổng hợp evidence · 15 phút
 
 ### 1. Evidence huddle
@@ -360,14 +383,103 @@ Next Change có thể là:
 
 ---
 
+## Sau lớp — hoàn tất test nếu cần
+
+Nếu 20 phút cuối chưa đủ để cả ba thành viên hoàn thành phiên riêng, mỗi người tự hẹn một tester và bổ sung Feedback Note trước deadline. Không bắt transcript hoặc report dài.
+
+Không dùng ba feedback để áp dụng threshold thống kê hoặc tuyên bố product value đã validated.
+
+---
+
+## Quy tắc dùng AI
+
+**Được dùng AI để:**
+
+- Gợi ý một cơ chế còn thiếu trong Solution Parking Lot.
+- Tạo content fixture và canned AI output.
+- Viết code hoặc component cho prototype.
+- Rà soát ba options có thật sự khác về mechanism hoặc role split không.
+- Tìm câu hỏi dẫn dắt trong test prompt.
+
+**Không được dùng AI để:**
+
+- Tạo quote, observation hoặc user feedback không tồn tại.
+- Viết lại evidence khiến không còn phân biệt lời user và diễn giải.
+- Chọn option thay tester hoặc thay nhóm.
+- Làm đẹp feedback tiêu cực.
+
+**AI Support Log — mỗi thành viên viết ngắn:**
+
+- AI đã giúp tôi ở đâu?
+- AI sai, hời hợt hoặc làm các options giống nhau ở đâu?
+- Tôi đã tự sửa hoặc quyết định lại điều gì?
+
+---
+
+## Nộp bài
+
+Mỗi học viên nộp một repository cá nhân:
+
+```
+Track1_Day18_MHV_HoVaTen
+```
+
+Ba thành viên có thể trỏ tới cùng Design Sheet, prototype và Group Feedback Synthesis. Mỗi repo phải có Feedback Note của chính phiên người đó facilitate; README và AI Support Log phải phản ánh đúng đóng góp cá nhân.
+
+**Cấu trúc tối thiểu:**
+
+```
+Track1_Day18_MHV_HoVaTen/
+├── README.md
+├── three-option-design-sheet.md       # hoặc link board chung của nhóm
+├── prototype-link.md                  # link A/B/C chung của nhóm
+├── prototype-feedback-note.md         # phiên do chính người nộp facilitate
+├── group-feedback-synthesis.md        # hoặc link artifact tổng hợp chung
+└── ai-support-log.md
+```
+
+Trong `README.md`, ghi rõ:
+
+- Thông tin cá nhân và nhóm: MHV, họ tên, tên nhóm, ba thành viên và case.
+- Hypothesis Problem: bản nhóm dùng trong Day 18.
+- Three Solution Options: mô tả ngắn A/B/C và link prototype.
+- Đóng góp của tôi trong nhóm: ghi cụ thể bạn đã làm gì, ví dụ option nào, shared context/content, Human–AI decisions, facilitation, observation hoặc tổng hợp feedback.
+- Prototype Feedback: observation từ phiên bạn facilitate, ba-feedback synthesis, Next Change và Still Unproven.
+- AI Support Log: AI đã giúp gì, sai/hời hợt ở đâu và bạn tự sửa gì.
+
+### Năm gate đánh giá
+
+| Gate | Đạt khi | Dấu hiệu chưa đạt |
+|---|---|---|
+| 1. Evidence Continuity | Hypothesis Problem nối được với ít nhất một observation Day 17 và ghi rõ điều chưa biết | Chỉ kể lại ý tưởng; coi Practice Notes là validation |
+| 2. Meaningful Options | A/B/C cùng problem và task nhưng khác mechanism hoặc cách chia việc user–AI | Ba option chỉ khác layout, màu hoặc wording |
+| 3. Human Control | Mỗi option nói rõ expectation, agency, evidence/uncertainty và đường recovery | AI tự hành động nhưng user không hiểu, không sửa hoặc không dừng được |
+| 4. Test-ready | Tester ngoài nhóm tự dùng được cả A/B/C với cùng task | Facilitator phải giải thích; một option hoàn thiện hơn hẳn hai option còn lại |
+| 5. Learning | Có ba Feedback Notes, pattern/khác biệt, Next Change và Still Unproven | Chỉ đếm "ba tester thích B" hoặc tuyên bố solution đã validated |
+
+### Kiểm tra trước khi nộp
+
+- [ ] Repo đúng tên `Track1_Day18_MHV_HoVaTen`.
+- [ ] `README.md` đủ sáu phần và ghi rõ "Đóng góp của tôi trong nhóm".
+- [ ] Link Design Sheet, A/B/C, Feedback Note cá nhân và Group Feedback Synthesis mở được với giảng viên/TA.
+- [ ] Ba prototype cùng user, situation, task, content và desired outcome.
+- [ ] Mỗi thành viên đã test cả A/B/C với một người khác; nhóm có đủ ba Feedback Notes.
+- [ ] Group Feedback Synthesis tách pattern, Next Change và Still Unproven.
+- [ ] AI Support Log là phần phản ánh của chính người nộp.
+
+> **Tự kiểm · HOÀN TẤT — Three prototypes, one next change**
+> Bài hoàn tất khi nhóm có một Hypothesis Problem có dấu vết từ Day 17, ba options đủ khác nhưng so sánh được, ba micro-prototype test-ready, ba Feedback Notes từ ba tester ngoài nhóm và một Group Next Change không nói quá evidence; đồng thời mỗi học viên có repo cá nhân đúng tên và ghi rõ option mình chịu trách nhiệm cùng các đóng góp khác.
+
+---
+
 ## Ánh xạ deliverable ↔ file trong repo
 
 | Chặng | Deliverable theo đề bài | File tương ứng của nhóm |
 |---|---|---|
 | 1 | Evidence huddle + Hypothesis Problem | [README.md](README.md) — mục "Chặng 1" |
 | 2 | Ba Solution Options + Distance check + Gate 2 | [README.md](README.md) — mục "Chặng 2"; bảng chuẩn hóa ở [three-option-design-sheet.md](three-option-design-sheet.md) |
-| 3 | Bốn quyết định thiết kế + Human–AI Decision Table + Gate 3 | *(chưa có file riêng — cần bổ sung, ví dụ `human-ai-decision-table.md`)* |
-| 4 | Build micro-prototype + Gate 4 | [prototype-link.md](prototype-link.md) |
-| 5 | Context, task, observation focus, luật facilitation | *(chưa có file riêng — có thể gộp vào đầu `prototype-feedback-note.md` hoặc tách `test-plan.md`)* |
+| 3 | Bốn quyết định thiết kế + Human–AI Decision Table + Gate 3 | [README.md](README.md) — mục "Chặng 3"; bảng chuẩn hóa ở [three-option-design-sheet.md](three-option-design-sheet.md) mục 4 |
+| 4 | Build micro-prototype + Gate 4 | [README.md](README.md) — mục "Chặng 4"; [prototype-link.md](prototype-link.md) |
+| 5 | Context, task, observation focus, luật facilitation | [README.md](README.md) — mục "Chặng 5" |
 | 6 | Prototype Feedback Note (×3) + Group Feedback Synthesis + Gate 5 | [prototype-feedback-note.md](prototype-feedback-note.md), [group-feedback-synthesis.md](group-feedback-synthesis.md) — evidence thô (transcript + ghi âm) ở [interviews/](interviews/) |
 | — | Log việc dùng AI hỗ trợ làm bài (minh bạch, không thuộc rubric Chặng 1–6 ở trên) | [ai-support-log.md](ai-support-log.md) |
