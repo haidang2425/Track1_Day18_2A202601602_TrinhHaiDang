@@ -8,7 +8,6 @@ from fastapi.responses import JSONResponse
 
 from .db import engine, Base
 from .routers import auth_router, mode_a, mode_b, mode_c, coach, compare, history
-from .services import embedding
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -29,11 +28,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.on_event("startup")
-def startup_event():
-    # Load embedding model once
-    embedding.get_model()
 
 @app.exception_handler(Exception)
 async def generic_handler(request, exc):
